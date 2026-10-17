@@ -79,10 +79,16 @@ describe('pages', () => {
     expect(within(document.querySelector('.activity-grid')).getAllByRole('heading', { level: 3 })).toHaveLength(5);
   });
 
-  it('shows the preview notice and no contact details or social links while none are configured', () => {
+  it('shows the preview notice, the registered office and legal line, and no email, phone or social links while none are configured', () => {
     setup('/contact/');
     expect(screen.getByText('Enquiry preview')).toBeInTheDocument();
-    expect(document.querySelector('.contact-details')).toBeNull();
+    const details = document.querySelector('.contact-details');
+    expect(within(details).getByText('Registered office')).toBeInTheDocument();
+    expect(within(details).getByText('Unit PC-1, Level 7, Al Maryah Tower')).toBeInTheDocument();
+    expect(within(details).queryByText('Email')).toBeNull();
+    expect(within(details).queryByText('Telephone')).toBeNull();
+    expect(screen.getByText(/registered in Abu Dhabi Global Market under number 39949/)).toBeInTheDocument();
+    expect(within(document.querySelector('.footer-contact address')).getByText('Unit PC-1, Level 7, Al Maryah Tower')).toBeInTheDocument();
     expect(document.querySelector('.footer-social')).toBeNull();
     expect(screen.getByRole('button', { name: /Download enquiry/ })).toBeInTheDocument();
   });

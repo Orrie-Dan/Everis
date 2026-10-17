@@ -44,6 +44,7 @@ export default function Footer({ inert }) {
           )}
           <a href="#main">Back to top <span aria-hidden="true">↑</span></a>
         </div>
+        {SITE.legal && <p className="footer-legal">{SITE.legal}</p>}
       </div>
     </footer>
   );

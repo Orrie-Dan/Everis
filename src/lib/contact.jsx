@@ -7,7 +7,7 @@ export function contactEntries(contact = SITE.contact) {
   if (contact.phone) entries.push(['Telephone', <a href={`tel:${contact.phone.replace(/[^+\d]/g, '')}`}>{contact.phone}</a>]);
   if (contact.address) {
     const lines = contact.address.split('\n');
-    entries.push(['Office', lines.map((line, i) => <span key={i}>{line}{i < lines.length - 1 && <br />}</span>)]);
+    entries.push(['Registered office', lines.map((line, i) => <span key={i}>{line}{i < lines.length - 1 && <br />}</span>)]);
   }
   return entries;
 }

@@ -4,8 +4,10 @@ export const SITE = {
   contact: {
     email: '',   // e.g. 'enquiries@example.com' — when set, the form opens an email draft instead of downloading
     phone: '',
-    address: ''
+    address: 'Unit PC-1, Level 7, Al Maryah Tower\nAbu Dhabi Global Market Square\nAl Maryah Island, Abu Dhabi\nUnited Arab Emirates'
   },
+  /* Company registration statement shown in the footer. */
+  legal: 'A private company limited by shares, registered in Abu Dhabi Global Market under number 39949. Registered office: Unit PC-1, Level 7, Al Maryah Tower, Abu Dhabi Global Market Square, Al Maryah Island, Abu Dhabi, United Arab Emirates.',
   social: [
     // { label: 'LinkedIn', url: 'https://www.linkedin.com/company/…' }
   ],
