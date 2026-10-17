@@ -31,13 +31,13 @@ export default function Philosophy() {
             <img
               ref={imgRef}
               style={allowMotion ? undefined : { transform: 'none' }}
-              src="/assets/savanna-tree-1000.webp"
-              srcSet="/assets/savanna-tree-1000.webp 1000w, /assets/savanna-tree-2000.webp 2000w"
+              src="/assets/control-centre-dusk-760.webp"
+              srcSet="/assets/control-centre-dusk-760.webp 760w, /assets/control-centre-dusk-1400.webp 1400w"
               sizes="(max-width: 900px) 100vw, 40vw"
-              alt="A lone tree on the savanna as the sun sets behind it"
+              alt="Operators at their desks in a power plant control room, with the plant visible through the windows at sunset"
               loading="lazy"
-              width="2000"
-              height="1333"
+              width="1400"
+              height="788"
             />
           </figure>
         </div>
