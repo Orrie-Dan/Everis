@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { EnquiryProvider } from '../context/EnquiryContext.jsx';
 import { ACTIVITIES, activityPath, findActivity } from '../data/content.js';
 import { ACTIVITY_PAGES, PAGES, findPage } from '../data/pages.js';
+import { ActivityPage } from '../pages/index.jsx';
 import Activities from './Activities.jsx';
 import ActivityDetail from './ActivityDetail.jsx';
 
@@ -28,6 +29,18 @@ describe('ActivityDetail', () => {
     expect(list('What we look for')).toEqual(activity.details.criteria);
     expect(screen.getByRole('link', { name: /Discuss an opportunity/ })).toHaveAttribute('href', '/contact/#contact-form');
     expect(screen.getByRole('link', { name: /All activities/ })).toHaveAttribute('href', '/activities/');
+  });
+});
+
+describe('ActivityPage', () => {
+  it('shows the activity photo full-bleed behind the title', () => {
+    const activity = ACTIVITIES[0];
+    render(<EnquiryProvider><ActivityPage activity={activity} /></EnquiryProvider>);
+
+    const hero = screen.getByRole('heading', { level: 1, name: activity.title }).closest('.page-hero');
+    expect(hero).toHaveClass('page-hero-image');
+    expect(within(hero).getByRole('img', { name: activity.image.alt })).toHaveAttribute('src', activity.image.src);
+    expect(screen.getAllByRole('img', { name: activity.image.alt })).toHaveLength(1);
   });
 });
 

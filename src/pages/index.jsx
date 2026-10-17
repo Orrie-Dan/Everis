@@ -56,7 +56,7 @@ export function ActivitiesPage() {
 export function ActivityPage({ activity }) {
   return (
     <>
-      <PageHero num={pad(ACTIVITIES.indexOf(activity) + 1)} kicker="Activities" title={activity.title} intro={activity.text}>
+      <PageHero num={pad(ACTIVITIES.indexOf(activity) + 1)} kicker="Activities" title={activity.title} intro={activity.text} image={activity.image}>
         <Link className="btn btn-ghost" to="/activities/"><span aria-hidden="true">←</span> All activities</Link>
       </PageHero>
       <ActivityDetail activity={activity} />

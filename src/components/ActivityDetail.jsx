@@ -9,38 +9,32 @@ export default function ActivityDetail({ activity }) {
   const { chooseInterest } = useEnquiry();
   const index = ACTIVITIES.indexOf(activity);
   const next = ACTIVITIES[(index + 1) % ACTIVITIES.length];
-  const { image, details } = activity;
+  const { details } = activity;
 
   return (
     <section id="activity" className="section activity-detail" aria-labelledby="activity-overview-title">
       <div className="container">
-        <div className="activity-detail-grid">
-          <Reveal as="figure" className="activity-detail-media">
-            <img src={image.src} srcSet={image.srcSet} sizes="(max-width: 900px) 100vw, 50vw" alt={image.alt} width={image.width} height={image.height} />
-          </Reveal>
+        <div className="activity-detail-body">
+          <Kicker>Overview</Kicker>
+          <h2 id="activity-overview-title" className="visually-hidden">Overview</h2>
+          <Reveal as="p" className="activity-overview">{details.overview}</Reveal>
 
-          <div className="activity-detail-body">
-            <Kicker>Overview</Kicker>
-            <h2 id="activity-overview-title" className="visually-hidden">Overview</h2>
-            <Reveal as="p" className="activity-overview">{details.overview}</Reveal>
+          <div className="activity-lists">
+            <Reveal>
+              <h3>What it covers</h3>
+              <ul>{details.covers.map(item => <li key={item}>{item}</li>)}</ul>
+            </Reveal>
+            <Reveal>
+              <h3>What we look for</h3>
+              <ul>{details.criteria.map(item => <li key={item}>{item}</li>)}</ul>
+            </Reveal>
+          </div>
 
-            <div className="activity-lists">
-              <Reveal>
-                <h3>What it covers</h3>
-                <ul>{details.covers.map(item => <li key={item}>{item}</li>)}</ul>
-              </Reveal>
-              <Reveal>
-                <h3>What we look for</h3>
-                <ul>{details.criteria.map(item => <li key={item}>{item}</li>)}</ul>
-              </Reveal>
-            </div>
-
-            <div className="activity-actions">
-              <Link className="btn btn-primary" to="/contact/#contact-form" onClick={() => chooseInterest(activity.interest)}>
-                Discuss an opportunity <Arrow />
-              </Link>
-              <Link className="btn btn-outline" to="/activities/">All activities</Link>
-            </div>
+          <div className="activity-actions">
+            <Link className="btn btn-primary" to="/contact/#contact-form" onClick={() => chooseInterest(activity.interest)}>
+              Discuss an opportunity <Arrow />
+            </Link>
+            <Link className="btn btn-outline" to="/activities/">All activities</Link>
           </div>
         </div>
 

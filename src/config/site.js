@@ -8,8 +8,17 @@ export const SITE = {
   },
   social: [
     // { label: 'LinkedIn', url: 'https://www.linkedin.com/company/…' }
-  ]
+  ],
+  /* Formspree endpoint that delivers the enquiry form by email, e.g. 'https://formspree.io/f/abcdwxyz'.
+     The form ID is public by design. When set, it takes priority over the email draft and the download. */
+  formEndpoint: ''
 };
+
+/** The configured Formspree endpoint, or '' when it is missing or not a Formspree form URL. */
+export function getFormEndpoint(site = SITE) {
+  const url = site.formEndpoint || '';
+  return /^https:\/\/formspree\.io\/f\/[A-Za-z0-9]+$/.test(url) ? url : '';
+}
 
 /** Social links with a label and an https URL; anything else is ignored. */
 export function getSocialLinks(site = SITE) {

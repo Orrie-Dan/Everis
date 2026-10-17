@@ -55,6 +55,29 @@ export function buildMailtoUrl(to, values) {
   return `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(buildEnquiryBody(values))}`;
 }
 
+/** The fields posted to Formspree; `email` doubles as the reply-to address of the notification. */
+export function enquiryPayload(values) {
+  return {
+    name: values.name.trim(),
+    email: values.email.trim(),
+    organisation: values.organisation.trim(),
+    interest: values.interest,
+    message: values.message.trim(),
+    _subject: `Website enquiry: ${values.interest}`
+  };
+}
+
+/** Posts the enquiry to a Formspree endpoint. Resolves when it is accepted; rejects otherwise. */
+export async function sendEnquiry(endpoint, values, doFetch = fetch) {
+  const response = await doFetch(endpoint, {
+    method: 'POST',
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify(enquiryPayload(values)),
+    signal: AbortSignal.timeout?.(20000)
+  });
+  if (!response.ok) throw new Error(`Enquiry was not accepted (HTTP ${response.status})`);
+}
+
 /** Downloads the enquiry as a text file. Nothing is sent anywhere. */
 export function downloadEnquiry(values) {
   const content = `ENQUIRY FOR EVERIS\nPrepared locally — not sent\n\n${buildEnquiryBody(values)}\n`;

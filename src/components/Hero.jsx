@@ -6,17 +6,29 @@ import { Arrow } from './Kicker.jsx';
 import Link from './Link.jsx';
 import SplitText from './SplitText.jsx';
 
+const AV1 = 'video/mp4; codecs="av01.0.08M.08"';
+
 export default function Hero() {
   const { chooseInterest } = useEnquiry();
   const allowMotion = useAllowMotion();
   const mediaRef = useRef(null);
   const videoRef = useRef(null);
   const [playing, setPlaying] = useState(false);
+  const [pageLoaded, setPageLoaded] = useState(() => document.readyState === 'complete');
 
-  /* The background video plays only when motion is allowed and the visitor has not
-     asked to save data; otherwise the still image stands in for it. */
-  const saveData = typeof navigator !== 'undefined' && navigator.connection?.saveData === true;
-  const playVideo = allowMotion && !saveData;
+  /* The background video plays only when motion is allowed and the visitor has not asked
+     to save data or is on a slow (3G or slower) connection; otherwise the still image
+     stands in for it. It loads after the page so it does not compete with the poster. */
+  const connection = typeof navigator !== 'undefined' ? navigator.connection : undefined;
+  const constrained = connection?.saveData === true || ['slow-2g', '2g', '3g'].includes(connection?.effectiveType);
+  const playVideo = allowMotion && !constrained && pageLoaded;
+
+  useEffect(() => {
+    if (pageLoaded) return undefined;
+    const onLoad = () => setPageLoaded(true);
+    window.addEventListener('load', onLoad, { once: true });
+    return () => window.removeEventListener('load', onLoad);
+  }, [pageLoaded]);
 
   /* React does not reflect `muted` as an attribute, which some browsers need before
      they will autoplay, so set it on the element and start playback explicitly. */
@@ -61,7 +73,10 @@ export default function Hero() {
               aria-hidden="true"
               onPlaying={() => setPlaying(true)}
             >
+              {/* The browser plays the first source it supports: AV1 where it can decode it, else H.264. */}
+              <source src="/assets/hero-solar-aerial-720-av1.mp4" type={AV1} media="(max-width: 900px)" />
               <source src="/assets/hero-solar-aerial-720.mp4" type="video/mp4" media="(max-width: 900px)" />
+              <source src="/assets/hero-solar-aerial-1080-av1.mp4" type={AV1} />
               <source src="/assets/hero-solar-aerial-1080.mp4" type="video/mp4" />
             </video>
           )}

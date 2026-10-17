@@ -59,18 +59,19 @@ To add a page: add it to `src/data/pages.js`, write its component in `src/pages/
 
 No contact details or social accounts have been published, and none have been invented. Set approved values in `src/config/site.js`:
 
-- `contact.email`, `contact.phone`, `contact.address`: shown beside the form and in the footer only when set. When `email` is set, the form opens a pre-filled email draft instead of downloading a copy, and the "preview" notice is removed.
+- `formEndpoint`: a Formspree form URL (`https://formspree.io/f/<id>`). When set, the form posts enquiries to Formspree, which emails them to the address on the Formspree account. Create the form at formspree.io, and enable its spam filtering and a reply-to on the `email` field. The form ID is public by design. Anything that is not a Formspree form URL is ignored.
+- `contact.email`, `contact.phone`, `contact.address`: shown beside the form and in the footer only when set. When `email` is set and `formEndpoint` is not, the form opens a pre-filled email draft instead of downloading a copy. When either is set, the "preview" notice is removed. If a Formspree submission fails, the error message points visitors to `contact.email` when it is set.
 - `social`: an array of `{ label, url }`. Only https links are accepted. The footer shows links only for the entries present.
 
-Until an email is set, the form validates input and downloads the enquiry as a text file. Nothing is sent or stored. Sending enquiries to a server would need a backend or form service, which this project does not include.
+Until `formEndpoint` or `email` is set, the form validates input and downloads the enquiry as a text file. Nothing is sent or stored. With Formspree, a hidden field catches simple bots, and submissions that fill it are dropped without being sent. Before going live with Formspree, publish a privacy notice: enquiries contain personal data and pass through a third party.
 
 ## Design
 
-A white page with navy ink (`#0a1a2f`/`#0c2340`), grid blue (`#0057d9`) as the primary accent and solar amber (`#ffb81c`) used only on dark backgrounds (hero, image cards, contact banner, footer). Headings use Archivo and body text uses Inter (Google Fonts, with system fallbacks). Colour tokens are defined at the top of `src/styles.css`.
+A white page with navy ink (`#0a1a2f`/`#0c2340`), grid blue (`#0057d9`) as the primary accent and solar amber (`#ffb81c`) used only on dark backgrounds (hero, image cards, contact banner, footer). Headings use Archivo and body text uses Inter, self-hosted as variable WOFF2 files in `public/fonts/` (SIL Open Font License, downloaded from Google Fonts). The latin subsets are preloaded, and the latin-ext files load only when a page uses those characters. Colour tokens are defined at the top of `src/styles.css`.
 
 The layout is full-width: sections span the viewport with responsive side gutters (`--gutter`) rather than a centred column, and the hero is full-bleed. Corners are squared (4–6px), headlines are two-tone (navy with a blue or grey second phrase), and headings reveal word by word beside a scroll-linked statement.
 
-Motion consists of a looping hero background video (shown only after it starts playing, over a still poster), a hero settle and light parallax, heading and card reveals, a statement whose words light up on scroll, and a progress line on the approach steps. When `prefers-reduced-motion: reduce` is set, all of it is turned off and content renders statically; the hero shows the still poster instead of the video, as it also does when the browser reports Save-Data. This updates live if the setting changes.
+Motion consists of a looping hero background video (shown only after it starts playing, over a still poster), a hero settle and light parallax, heading and card reveals, a statement whose words light up on scroll, and a progress line on the approach steps. When `prefers-reduced-motion: reduce` is set, all of it is turned off and content renders statically; the hero shows the still poster instead of the video, as it also does when the browser reports Save-Data or a 3G-or-slower connection. The video starts loading only after the page has loaded. It is served as AV1 (`*-av1.mp4`) where the browser can decode it, and as H.264 otherwise, at 720p up to 900px wide and 1080p above. This updates live if the setting changes.
 
 ## Imagery
 
@@ -78,12 +79,9 @@ The photographs in `public/assets/` were downloaded from Unsplash under the [Uns
 
 | File | Unsplash source |
 | --- | --- |
-| hero-solar-dusk-* | images.unsplash.com/photo-1611365892117-00ac5ef43c90 |
 | savanna-dusk-* | images.unsplash.com/photo-1547471080-7cc2caa01a7e |
 | savanna-tree-* | images.unsplash.com/photo-1516026672322-bc52d61a55d5 |
-| generation-wind-dusk-* | images.unsplash.com/photo-1466611653911-95081537e5b7 |
 | solar-aerial-* | images.unsplash.com/photo-1497435334941-8c899ee9e8e9 |
-| industrial-works-* | images.unsplash.com/photo-1504328345606-18bbc8c9d7d1 |
 | substation-* | images.unsplash.com/photo-1509390144018-eeaf65052242 |
 | transmission-dusk-* | images.unsplash.com/photo-1473341304170-971dccb5ac1e |
 
@@ -91,7 +89,7 @@ These files were added later and are not from Unsplash. Record each source and l
 
 | File | Source |
 | --- | --- |
-| hero-solar-aerial-*.mp4, hero-solar-aerial-*.webp (poster) | Drone video, source not yet recorded. 20s loop cut from the original with a 1.5s crossfade at the loop point |
+| hero-solar-aerial-*.mp4, hero-solar-aerial-*.webp (poster) | Drone video, source not yet recorded. 20s loop cut from the original with a 1.5s crossfade at the loop point. Re-encoded without audio: H.264 two-pass at 1300k (1080p) and 500k (720p), and AV1 (SVT-AV1, VBR 650k and 380k) |
 | wind-savanna-dusk-* | AI-generated illustration, source not yet recorded |
 | power-plant-savanna-dusk-* | AI-generated illustration, source not yet recorded |
 
